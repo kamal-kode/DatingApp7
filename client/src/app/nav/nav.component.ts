@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Observable, of } from 'rxjs';
 import { User } from '../_models/User';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -12,14 +14,15 @@ export class NavComponent implements OnInit {
   model: any = {};
   //Due to strict mode we need to initialize the current user with | (union) and of operator with default value as null
   //currentUser$: Observable<User | null> = of(null)
- 
-  constructor(public accountService: AccountService) {
+
+  constructor(public accountService: AccountService, 
+    private router: Router, private toastr : ToastrService) {
 
   }
 
   ngOnInit(): void {
     console.log('ng nav init');
-    
+
   }
 
   login() {
@@ -28,15 +31,18 @@ export class NavComponent implements OnInit {
       .subscribe({
         next: response => {
           console.log(response);
+          this.router.navigateByUrl('/members')
         },
         error: error => {
           console.log(error);
+          this.toastr.error(error.error)
         }
       })
-
   }
-  
-  logout(){
+
+  logout() {
     this.accountService.logout();
+    //Home page 
+    this.router.navigateByUrl('/')
   }
 }

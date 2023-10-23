@@ -7,15 +7,15 @@ import { User } from "../_models/User";
 @Injectable({
   providedIn: 'root' // Now no need to provide service in app module provider. This property automatically takes care
 })
-export class AccountService  {
+export class AccountService {
   baseUrl = 'https://localhost:5001/api/';
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
   constructor(private http: HttpClient) { }
-  
-  slogin(model: any) {
+
+  login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model)
-    //Pipe is used for transform the data
+      //Pipe is used for transform the data
       .pipe(
         map((response: User) => {
           const user = response;
@@ -27,25 +27,25 @@ export class AccountService  {
       );
   }
 
-  register(model: any){
-   return this.http.post<User>(this.baseUrl + 'account/register', model)
-    .pipe(
-      map( user => {
-         if(user){
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
-         }
-         return user;
-      })
-    )
+  register(model: any) {
+    return this.http.post<User>(this.baseUrl + 'account/register', model)
+      .pipe(
+        map(user => {
+          if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+            this.currentUserSource.next(user);
+          }
+          return user;
+        })
+      )
   }
-  
+
   logout() {
     localStorage.removeItem('user')
     this.currentUserSource.next(null);
   }
 
-  setCurrentUser(user : User){
+  setCurrentUser(user: User) {
     this.currentUserSource.next(user);
   }
 }
