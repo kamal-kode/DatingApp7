@@ -22,7 +22,6 @@ public class UsersController : BaseAPIController
         return await _context.Users.ToListAsync(); ;
     }
 
-
     [HttpGet("{id}")]
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
