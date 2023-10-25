@@ -14,7 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
       positionClass : 'toast-bottom-right'
     }),
   ],
-  //This is required. Just need to pass module name
+  //This is required. Just need to export module name
   exports:[
     BsDropdownModule,
     ToastrModule
