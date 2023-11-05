@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_services/account.service';
-import { Observable, of } from 'rxjs';
-import { User } from '../_models/user';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -10,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
+
 export class NavComponent implements OnInit {
   model: any = {};
   //Due to strict mode we need to initialize the current user with | (union) and of operator with default value as null
@@ -17,7 +16,6 @@ export class NavComponent implements OnInit {
 
   constructor(public accountService: AccountService, 
     private router: Router, private toastr : ToastrService) {
-
   }
 
   ngOnInit(): void {
