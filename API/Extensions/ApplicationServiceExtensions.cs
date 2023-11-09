@@ -25,6 +25,7 @@ public static class ApplicationServiceExtensions
         //Photo upload service
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActivity>();
+        services.AddScoped<ILikesRepository, LikesRepository>();
         return services;
     }
 }

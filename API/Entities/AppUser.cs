@@ -21,8 +21,10 @@ public class AppUser
    public string Country { get; set; }
    public List<Photo> photos { get; set; } = new();
 
-   public int GetAge(){
-    return DateOfBirth.CalculateAge();
-   }
+   public List<UserLike> LikedByUsers { get; set; }
+   public List<UserLike> LikedUsers { get; set; }
 
+//    public int GetAge(){
+//     return DateOfBirth.CalculateAge();
+//    }
 }
