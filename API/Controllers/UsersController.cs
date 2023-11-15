@@ -5,7 +5,6 @@ using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -23,6 +22,7 @@ public class UsersController : BaseAPIController
         _photoService = photoService;
     }
 
+    // [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
@@ -46,6 +46,7 @@ public class UsersController : BaseAPIController
     // }
 
     [HttpGet("{username}")]
+    // [Authorize(Roles = "Member")]
     public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
         return await _userRepository.GetMemberAsync(username);

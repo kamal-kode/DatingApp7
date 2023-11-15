@@ -44,7 +44,7 @@ export class MemberDetailComponent implements OnInit {
   }
   onTabActivated(data: TabDirective) {
     this.activeTab = data
-    if (this.activeTab.heading === 'Messages') {
+    if (this.activeTab.Management === 'Messages') {
       this.loadMessages();
     }
   }
@@ -63,7 +63,7 @@ export class MemberDetailComponent implements OnInit {
   //Select message tab on Messages button click
   selectTab(heading: string) {
     if (this.memberTabs) {
-      this.memberTabs.tabs.find(t => t.heading === heading)!.active = true;
+      this.memberTabs.tabs.find(t => t.Management === heading)!.active = true;
     }
   }
   // loadMember() {
