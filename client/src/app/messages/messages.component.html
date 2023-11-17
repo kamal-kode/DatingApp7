@@ -43,7 +43,7 @@
                         <strong>{{message.senderUserName | titlecase}}</strong>
                     </div>
                 </td>
-                <td>{{message.messageSent + 'Z' | timeago}}</td>
+                <td>{{message.messageSent | timeago}}</td>
                 <td>
                     <!-- $event.stopPropagation() will prevent the click event and navigate from current page -->
                     <button (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)" class="btn btn-danger"> Delete</button>

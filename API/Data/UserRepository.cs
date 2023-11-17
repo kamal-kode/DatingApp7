@@ -21,9 +21,10 @@ public class UserRepository : IUserRepository
 
     public async Task<MemberDto> GetMemberAsync(string username)
     {
-        return await _context.Users.Where(x => x.UserName == username)
+        var result= await _context.Users.Where(x => x.UserName == username)
         .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
         .SingleOrDefaultAsync();
+        return result;
     }
 
     public async Task<PageList<MemberDto>> GetMembersAsync(UserParams userParams)

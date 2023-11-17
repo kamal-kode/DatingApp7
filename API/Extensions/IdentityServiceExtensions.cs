@@ -13,9 +13,10 @@ public static class IdentityServiceExtensions
         this IServiceCollection services, IConfiguration configuration)
     {
         //Setup asp net core identity user management
-        services.AddIdentityCore<AppUser>(options =>{
+        services.AddIdentityCore<AppUser>(options =>
+        {
             options.Password.RequireNonAlphanumeric = false;
-        
+
         }).AddRoles<AppRole>()
           .AddRoleManager<RoleManager<AppRole>>()
           .AddEntityFrameworkStores<DataContext>(); // Create all table in database
@@ -31,11 +32,27 @@ public static class IdentityServiceExtensions
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
+
+            //Configure SignalR authentication
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
         //2nd method for Authorization using policy.
-        services.AddAuthorization(opt => {
+        services.AddAuthorization(opt =>
+        {
             opt.AddPolicy("RequiredAdminRole", policy => policy.RequireRole("Admin"));
-            opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin" , "Moderator"));
+            opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
         });
         return services;
     }

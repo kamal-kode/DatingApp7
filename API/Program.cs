@@ -2,6 +2,7 @@ using API.Data;
 using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
@@ -30,13 +31,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
-.WithOrigins("https://localhost:4200"));
+app.UseCors(builder => builder
+.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowCredentials() // Setup SignalR credential
+.WithOrigins("https://localhost:4200")
+);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+//SignalR setup
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 // Add pending Migration and seeding data
 //Access all services
@@ -48,6 +56,8 @@ try
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
+    //Remove unnecessary connection record.
+    await context.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]");
     await Seed.SeedUsers(userManager, roleManager);
 }
 catch (System.Exception ex)
