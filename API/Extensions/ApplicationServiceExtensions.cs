@@ -18,7 +18,7 @@ public static class ApplicationServiceExtensions
 
         services.AddCors();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        
         //Auto mapper configuration
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         //Access app settings with strongly type property
@@ -26,10 +26,15 @@ public static class ApplicationServiceExtensions
         //Photo upload service
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActivity>();
-        services.AddScoped<ILikesRepository, LikesRepository>();
-        services.AddScoped<IMessageRepository, MessageRepository>();
+        // services.AddScoped<ILikesRepository, LikesRepository>();
+        // services.AddScoped<IMessageRepository, MessageRepository>();
+        // services.AddScoped<IUserRepository, UserRepository>();
+        //Instead of adding single repository to services we can add this.
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();
+        
         return services;
     }
 }

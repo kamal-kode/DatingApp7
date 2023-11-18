@@ -30,11 +30,9 @@ export class NavComponent implements OnInit {
         next: response => {
           console.log(response);
           this.router.navigateByUrl('/members')
+          //clear text box after logout
+          this.model = {};
         }
-        // ,error: error => {
-        //   console.log(error);
-        //   this.toastr.error(error.error)
-        // }
       })
   }
 
