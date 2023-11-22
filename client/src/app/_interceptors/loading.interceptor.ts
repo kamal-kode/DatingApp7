@@ -5,8 +5,9 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { Observable, delay, finalize } from 'rxjs';
+import { Observable, delay, finalize, identity } from 'rxjs';
 import { LoadingService } from '../_services/loading.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -16,7 +17,8 @@ export class LoadingInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.loadingService.busy()
     return next.handle(request).pipe(
-      delay(1000),
+      //We can not put null . identity does nothing just matches the syntax
+     (environment.production ? identity : delay(1000)),
       finalize(() => {
         this.loadingService.idle();
       })

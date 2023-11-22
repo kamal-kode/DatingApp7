@@ -13,7 +13,11 @@ public class Seed
     private const string Member = "Member";
     private const string Admin = "Admin";
     private const string Moderator = "Moderator";
-
+    public static async Task ClearConnections(DataContext dataContext)
+    {
+        dataContext.Connections.RemoveRange(dataContext.Connections);
+        await dataContext.SaveChangesAsync();
+    }
     public static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         if (await userManager.Users.AnyAsync()) return;
@@ -38,6 +42,8 @@ public class Seed
         {
             // using var hmac = new HMACSHA512();
             user.UserName = user.UserName.ToLower();
+            user.Created = DateTime.SpecifyKind(user.Created, DateTimeKind.Utc);
+            user.LastActive = DateTime.SpecifyKind(user.LastActive, DateTimeKind.Utc);
             // user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
             // user.PasswordSalt = hmac.Key;
             await userManager.CreateAsync(user, "Pa$$w0rd");
@@ -45,12 +51,13 @@ public class Seed
             await userManager.AddToRoleAsync(user, Member);
         }
 
-        var admin= new AppUser {
+        var admin = new AppUser
+        {
             UserName = "admin"
         };
         await userManager.CreateAsync(admin, "Pa$$w0rd");
         //Add user with multiple role.
-        await userManager.AddToRolesAsync(admin, new [] { Admin, Moderator });
+        await userManager.AddToRolesAsync(admin, new[] { Admin, Moderator });
 
     }
 }

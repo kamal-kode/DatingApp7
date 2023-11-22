@@ -1,0 +1,23 @@
+# fly.toml app configuration file generated for datingapp07-divine-flower-9867 on 2023-11-21T18:28:49+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "datingapp07-divine-flower-9867"
+primary_region = "dfw"
+
+[build]
+  image = "kabi26/datingapp:latest"
+
+[env]
+ASPNETCORE_URLS="http://+:8080"
+CloudinarySettings__CloudName="dtuujvgqx"
+CloudinarySettings__ApiKey="688627239262849"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
